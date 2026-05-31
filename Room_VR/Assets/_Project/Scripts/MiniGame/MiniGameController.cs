@@ -1,45 +1,41 @@
-using System;
 using UnityEngine;
 
 namespace RoomVR.MiniGame
 {
-    public class MiniGameController : MonoBehaviour
+    public class MiniGameController : MiniGameBase
     {
+        [Header("Crosshair")]
         [SerializeField]
-        [Tooltip("The crosshair object that moves with stick input.")]
         Transform m_Crosshair;
 
         [SerializeField]
-        [Tooltip("Movement speed of the crosshair in world units per second.")]
         float m_CrosshairSpeed = 3f;
 
         [SerializeField]
-        [Tooltip("Half-size of the playfield. Crosshair is clamped within this boundary.")]
         float m_PlayfieldHalfSize = 4f;
 
+        [Header("Hit Detection")]
         [SerializeField]
-        [Tooltip("Radius within which targets are destroyed when a bomb drops.")]
-        float m_BombRadius = 0.6f;
+        [Tooltip("Overlap radius for hit detection. Should roughly match crosshair + target visual size.")]
+        float m_BombRadius = 0.35f;
+
+        [Header("Game Config")]
+        [SerializeField]
+        int m_TotalTargets = 8;
 
         [SerializeField]
-        [Tooltip("The spawner that creates targets.")]
         FallingObjectSpawner m_Spawner;
 
-        public event Action<int> OnScoreChanged;
-        public event Action OnAllTargetsCleared;
-
+        bool m_IsActive;
         int m_Score;
         int m_TargetsRemaining;
-        bool m_IsActive;
 
-        public int Score => m_Score;
-        public bool IsActive => m_IsActive;
-        public Transform Crosshair => m_Crosshair;
+        public override bool IsActive => m_IsActive;
 
-        public void StartGame(int totalTargets)
+        public override void StartGame()
         {
             m_Score = 0;
-            m_TargetsRemaining = totalTargets;
+            m_TargetsRemaining = m_TotalTargets;
             m_IsActive = true;
 
             if (m_Crosshair != null)
@@ -48,16 +44,16 @@ namespace RoomVR.MiniGame
                 m_Crosshair.localPosition = new Vector3(0f, pos.y, 0f);
             }
 
-            m_Spawner?.StartSpawning(totalTargets);
+            m_Spawner?.StartSpawning(m_TotalTargets);
         }
 
-        public void StopGame()
+        public override void StopGame()
         {
             m_IsActive = false;
             m_Spawner?.StopSpawning();
         }
 
-        public void MoveCrosshair(Vector2 input)
+        public override void OnStickInput(Vector2 input)
         {
             if (!m_IsActive || m_Crosshair == null)
                 return;
@@ -69,32 +65,27 @@ namespace RoomVR.MiniGame
             m_Crosshair.localPosition = pos;
         }
 
-        public void DropBomb()
+        public override void OnFireInput()
         {
             if (!m_IsActive || m_Crosshair == null)
                 return;
 
-            var bombPos = new Vector3(m_Crosshair.position.x, 0f, m_Crosshair.position.z);
-            var hits = Physics.OverlapSphere(bombPos, m_BombRadius, LayerMask.GetMask("MiniGame"));
-
+            // Use the crosshair's actual world position so targets at Y=50 are detected.
+            var hits = Physics.OverlapSphere(m_Crosshair.position, m_BombRadius, LayerMask.GetMask("MiniGame"));
             foreach (var hit in hits)
-            {
-                var target = hit.GetComponentInParent<FallingTarget>();
-                if (target != null)
-                    target.TakeHit();
-            }
+                hit.GetComponentInParent<FallingTarget>()?.TakeHit();
         }
 
         public void RegisterTargetDestroyed()
         {
             m_Score++;
             m_TargetsRemaining--;
-            OnScoreChanged?.Invoke(m_Score);
+            RaiseScoreChanged(m_Score);
 
             if (m_TargetsRemaining <= 0)
             {
                 m_IsActive = false;
-                OnAllTargetsCleared?.Invoke();
+                RaiseGameCleared();
             }
         }
     }

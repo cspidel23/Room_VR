@@ -8,30 +8,32 @@ using RoomVR.MiniGame;
 
 namespace RoomVR.Interaction
 {
-    // Starts the mini-game when BOTH hands grab the controller prop.
-    // Attach transform logic is handled by TwoHandGrabInteractable.
-    // If either hand releases, the remaining hand is force-released too.
+    // Manages the physical grab of the controller prop and routes fixed
+    // VR inputs (stick / fire button) to whatever MiniGameBase is assigned.
+    // Bindings are configured directly on this component — no external InputActionAsset needed.
     [RequireComponent(typeof(TwoHandGrabInteractable))]
     public class ControllerGrabHandler : MonoBehaviour
     {
+        [Header("Input")]
         [SerializeField]
-        [Tooltip("Left stick action (Vector2). Assign XRI Left/Thumbstick.")]
-        InputActionReference m_StickAction;
+        [Tooltip("Left stick for crosshair / aiming. Default: left thumbstick.")]
+        InputAction m_StickAction = new InputAction(
+            name: "Stick",
+            type: InputActionType.Value,
+            binding: "<XRController>{LeftHand}/{Primary2DAxis}");
 
         [SerializeField]
-        [Tooltip("Fire action (Button). Assign XRI Left/Activate.")]
-        InputActionReference m_TriggerAction;
+        [Tooltip("Fire buttons. Configure bindings in the Inspector.")]
+        InputAction m_FireAction = new InputAction(name: "Fire", type: InputActionType.Button);
 
+        [Header("Game")]
         [SerializeField]
-        MiniGameController m_MiniGame;
-
-        [SerializeField]
-        [Tooltip("Total targets to spawn when the game starts.")]
-        int m_TotalTargets = 8;
+        [Tooltip("Any MiniGameBase implementation. Swap to change the active game.")]
+        MiniGameBase m_MiniGame;
 
         XRGrabInteractable m_Grab;
         readonly List<IXRSelectInteractor> m_CurrentInteractors = new();
-        bool m_TriggerWasPressed;
+        bool m_FireWasPressed;
 
         bool BothHandsGrabbing => m_CurrentInteractors.Count >= 2;
 
@@ -40,18 +42,20 @@ namespace RoomVR.Interaction
             m_Grab = GetComponent<XRGrabInteractable>();
             m_Grab.selectEntered.AddListener(OnSelectEntered);
             m_Grab.selectExited.AddListener(OnSelectExited);
+
+
         }
 
         void OnEnable()
         {
-            m_StickAction?.action.Enable();
-            m_TriggerAction?.action.Enable();
+            m_StickAction.Enable();
+            m_FireAction.Enable();
         }
 
         void OnDisable()
         {
-            m_StickAction?.action.Disable();
-            m_TriggerAction?.action.Disable();
+            m_StickAction.Disable();
+            m_FireAction.Disable();
         }
 
         void Update()
@@ -59,16 +63,12 @@ namespace RoomVR.Interaction
             if (!BothHandsGrabbing || m_MiniGame == null)
                 return;
 
-            if (m_StickAction != null)
-                m_MiniGame.MoveCrosshair(m_StickAction.action.ReadValue<Vector2>());
+            m_MiniGame.OnStickInput(m_StickAction.ReadValue<Vector2>());
 
-            if (m_TriggerAction != null)
-            {
-                var pressed = m_TriggerAction.action.IsPressed();
-                if (pressed && !m_TriggerWasPressed)
-                    m_MiniGame.DropBomb();
-                m_TriggerWasPressed = pressed;
-            }
+            var pressed = m_FireAction.IsPressed();
+            if (pressed && !m_FireWasPressed)
+                m_MiniGame.OnFireInput();
+            m_FireWasPressed = pressed;
         }
 
         void OnSelectEntered(SelectEnterEventArgs args)
@@ -77,7 +77,7 @@ namespace RoomVR.Interaction
                 m_CurrentInteractors.Add(args.interactorObject);
 
             if (BothHandsGrabbing && m_MiniGame != null && !m_MiniGame.IsActive)
-                m_MiniGame.StartGame(m_TotalTargets);
+                m_MiniGame.StartGame();
         }
 
         void OnSelectExited(SelectExitEventArgs args)
