@@ -115,6 +115,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.3",
       "depth": 1,
@@ -367,6 +374,16 @@
         "com.unity.xr.legacyinputhelpers": "2.1.2"
       },
       "url": "https://packages.unity.com"
+    },
+    "io.github.hatayama.uloopmcp": {
+      "version": "https://github.com/hatayama/unity-cli-loop.git?path=/Packages/src",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "eeb9ab92b4078375d1300cf210bdb77fbdb34b3a"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
