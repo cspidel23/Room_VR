@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 namespace RoomVR.MiniGame
 {
     public class DroppingGameController : MiniGameBase
     {
+        public static DroppingGameController Instance { get; private set; }
         [SerializeField] private Transform m_Player;
         [SerializeField] private float m_PlayfieldHalfSize = 4.25f;
 
@@ -17,7 +19,20 @@ namespace RoomVR.MiniGame
         private float timer = 0f;
         private float dropCooldown = 0.5f;
 
+        private int score;
+        [SerializeField] private TextMeshProUGUI m_ScoreText;
 
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+        }
+        private void Start()
+        {
+            UpdateScoreText();
+        }
         private void Update()
         {
             // we want a timer cooldown to prevent the player from spamming drop
@@ -65,6 +80,21 @@ namespace RoomVR.MiniGame
             // instantiate the drop prefab at the player's position
             m_QueneInput = true;
             // GameObject instance = Instantiate(m_dropPrefab, m_Player.position, Quaternion.identity);
+        }
+
+        public void OnTargetHit()
+        {
+            m_Score++;
+            UpdateScoreText();
+        }
+
+        private void UpdateScoreText()
+        {
+            if (m_ScoreText != null)
+            {
+                // set to at least 3 digits with leading zeros
+                m_ScoreText.text = m_Score.ToString("D3");
+            }
         }
 
 
