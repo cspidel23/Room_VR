@@ -62,6 +62,10 @@ namespace RoomVR.Interaction
 
         bool BothHandsGrabbing => m_CurrentInteractors.Count >= 2;
 
+        // True while at least one hand is holding the prop. Used by ControllerModelAnimator
+        // to only animate buttons / stick while the controller is actually held.
+        public bool IsGrabbed => m_CurrentInteractors.Count > 0;
+
         void Awake()
         {
             m_TwoHandGrab = GetComponent<TwoHandGrabInteractable>();

@@ -80,6 +80,11 @@ namespace RoomVR.Interaction
 
         float m_GripOverride = -1f;
 
+        // Extra local rotation applied to the thumb's proximal joint on top of the
+        // grab pose, driven externally (e.g. by ControllerModelAnimator) so the thumb
+        // reacts to button presses / stick movement. Identity = no extra motion.
+        Quaternion m_ThumbOverlay = Quaternion.identity;
+
         readonly Dictionary<Transform, Quaternion> m_OriginalRotations = new();
         readonly Dictionary<Transform, Vector3>    m_OriginalPositions = new();
 
@@ -124,12 +129,17 @@ namespace RoomVR.Interaction
             ApplyFinger(m_Ring,   grip,                    isGrabbing);
             ApplyFinger(m_Pinky,  grip,                    isGrabbing);
 
+            ApplyThumbOverlay(isGrabbing);
             ApplyWrist(isGrabbing);
         }
 
         // ── Public API ────────────────────────────────────────────────────────────
 
         public void SetGripOverride(float t) => m_GripOverride = Mathf.Clamp01(t);
+
+        // Sets the extra thumb rotation for this frame. Pass Quaternion.identity to clear.
+        // Only takes effect while the hand is in grab pose.
+        public void SetThumbOverlay(Quaternion overlay) => m_ThumbOverlay = overlay;
 
         public void ClearGripOverride() => m_GripOverride = -1f;
 
@@ -149,6 +159,19 @@ namespace RoomVR.Interaction
                 if (!m_OriginalRotations.TryGetValue(joint, out var original)) continue;
                 joint.localRotation = original * Quaternion.AngleAxis(targetAngle, finger.curlAxis);
             }
+        }
+
+        // Adds m_ThumbOverlay on top of the thumb's proximal joint so button / stick
+        // input rotates the whole thumb from its base. No-op when not grabbing.
+        void ApplyThumbOverlay(bool isGrabbing)
+        {
+            if (!isGrabbing) return;
+            if (m_Thumb.joints == null || m_Thumb.joints.Length == 0) return;
+
+            var root = m_Thumb.joints[0];
+            if (root == null || !m_OriginalRotations.ContainsKey(root)) return;
+
+            root.localRotation *= m_ThumbOverlay;
         }
 
         void ApplyWrist(bool isGrabbing)
