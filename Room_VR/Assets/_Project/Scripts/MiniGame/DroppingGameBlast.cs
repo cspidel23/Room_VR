@@ -62,7 +62,7 @@ namespace RoomVR.MiniGame
         {
             if (other.CompareTag("DroppingObject"))
             {
-                MiniGameAudioController.Instance.PlayBlastAudio();
+                AudioController.Instance.PlayBlastAudio();
                 DroppingGameController.Instance.OnTargetHit();
                 other.GetComponent<DroppingObject>().Blast();
                 Destroy(other.gameObject);

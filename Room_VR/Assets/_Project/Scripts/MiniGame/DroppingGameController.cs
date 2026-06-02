@@ -24,8 +24,17 @@ namespace RoomVR.MiniGame
         private float timer = 0f;
         private float dropCooldown = 0.5f;
 
+        private float animTimer = 0f;
+        private float animCooldown = 0.5f; // add up to an additional .25 range by random
+
         private int score;
         [SerializeField] private TextMeshProUGUI m_ScoreText;
+
+        private GameObject[] m_PlayerSpritesCurrent;
+        [SerializeField] private GameObject[] m_PlayerSpritesLeft;
+        [SerializeField] private GameObject[] m_PlayerSpritesRight;
+
+        private int m_CurrentSpriteIndex = 0;
 
         private void Awake()
         {
@@ -51,7 +60,20 @@ namespace RoomVR.MiniGame
                     timer = 0f;
                 }
             }
-
+            // randomly swap the player sprite every .5 to .75 seconds
+            /*
+            animTimer += Time.deltaTime;
+            if (animTimer >= animCooldown)
+            {
+                animTimer = 0f;
+                animCooldown = 0.5f + Random.Range(0f, 0.25f);
+                m_CurrentSpriteIndex = (m_CurrentSpriteIndex + 1) % m_PlayerSpritesCurrent.Length;
+                for (int i = 0; i < m_PlayerSpritesCurrent.Length; i++)
+                {
+                    m_PlayerSpritesCurrent[i].SetActive(i == m_CurrentSpriteIndex);
+                }
+            }
+            */
 
         }
         public override void StartGame()
@@ -80,6 +102,38 @@ namespace RoomVR.MiniGame
             pos.x = Mathf.Clamp(pos.x, -m_PlayfieldHalfSize, m_PlayfieldHalfSize);
             pos.z = Mathf.Clamp(pos.z, -m_PlayfieldHalfSize, m_PlayfieldHalfSize);
             m_Player.localPosition = pos;
+            // if moving left should use the left sprites, when moving right use the right sprites
+            /*
+            if (input.x < 0)
+            {
+                if (m_PlayerSpritesCurrent != m_PlayerSpritesLeft)
+                {
+                    m_PlayerSpritesCurrent = m_PlayerSpritesLeft;
+                    animTimer = 0f;
+                    animCooldown = 0.5f + Random.Range(0f, 0.25f);
+                    m_CurrentSpriteIndex = (m_CurrentSpriteIndex + 1) % m_PlayerSpritesCurrent.Length;
+                    for (int i = 0; i < m_PlayerSpritesCurrent.Length; i++)
+                    {
+                        m_PlayerSpritesCurrent[i].SetActive(i == m_CurrentSpriteIndex);
+                    }
+                }
+            }
+            else if (input.x > 0)
+            {
+                if (m_PlayerSpritesCurrent != m_PlayerSpritesRight)
+                {
+                    m_PlayerSpritesCurrent = m_PlayerSpritesRight;
+                    animTimer = 0f;
+                    animCooldown = 0.5f + Random.Range(0f, 0.25f);
+                    m_CurrentSpriteIndex = (m_CurrentSpriteIndex + 1) % m_PlayerSpritesCurrent.Length;
+                    for (int i = 0; i < m_PlayerSpritesCurrent.Length; i++)
+                    {
+                        m_PlayerSpritesCurrent[i].SetActive(i == m_CurrentSpriteIndex);
+                    }
+                }
+            }
+            */
+
         }
 
         public override void OnFireInput()
@@ -119,7 +173,7 @@ namespace RoomVR.MiniGame
         {
             foreach (var platform in m_Platforms)
             {
-                platform.IncreaseSpeed(0.25f);
+                platform.IncreaseSpeed(1.2f, true);
             }
         }
 
