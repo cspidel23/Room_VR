@@ -10,7 +10,9 @@ namespace RoomVR.Interaction
 {
     // Manages the physical grab of the controller prop and routes fixed
     // VR inputs (stick / fire button) to whatever MiniGameBase is assigned.
-    // Bindings are configured directly on this component — no external InputActionAsset needed.
+    // - Single hand grab  → grab pose on that hand only
+    // - Both hands grab   → grab pose on both hands + game starts
+    // - Any hand releases → force-release both hands + clear all poses
     [RequireComponent(typeof(TwoHandGrabInteractable))]
     public class ControllerGrabHandler : MonoBehaviour
     {
@@ -28,11 +30,11 @@ namespace RoomVR.Interaction
 
         [Header("Hand Pose")]
         [SerializeField]
-        [Tooltip("HandPoseAnimator on the left hand model. Forces grip pose when prop is held.")]
+        [Tooltip("HandPoseAnimator on the left hand model.")]
         HandPoseAnimator m_LeftHandPose;
 
         [SerializeField]
-        [Tooltip("HandPoseAnimator on the right hand model. Forces grip pose when prop is held.")]
+        [Tooltip("HandPoseAnimator on the right hand model.")]
         HandPoseAnimator m_RightHandPose;
 
         [Header("Game")]
@@ -51,8 +53,6 @@ namespace RoomVR.Interaction
             m_Grab = GetComponent<XRGrabInteractable>();
             m_Grab.selectEntered.AddListener(OnSelectEntered);
             m_Grab.selectExited.AddListener(OnSelectExited);
-
-
         }
 
         void OnEnable()
@@ -82,36 +82,49 @@ namespace RoomVR.Interaction
 
         void OnSelectEntered(SelectEnterEventArgs args)
         {
-            if (!m_CurrentInteractors.Contains(args.interactorObject))
-                m_CurrentInteractors.Add(args.interactorObject);
+            if (m_CurrentInteractors.Contains(args.interactorObject))
+                return;
 
-            if (BothHandsGrabbing)
-            {
-                m_LeftHandPose?.SetGripOverride(1f);
-                m_RightHandPose?.SetGripOverride(1f);
+            m_CurrentInteractors.Add(args.interactorObject);
 
-                if (m_MiniGame != null && !m_MiniGame.IsActive)
-                    m_MiniGame.StartGame();
-            }
+            // 掴んだ手にグラブポーズを適用（片手でも両手でも）
+            GetHandPose(args.interactorObject)?.SetGripOverride(1f);
+
+            if (BothHandsGrabbing && m_MiniGame != null && !m_MiniGame.IsActive)
+                m_MiniGame.StartGame();
         }
 
         void OnSelectExited(SelectExitEventArgs args)
         {
             m_CurrentInteractors.Remove(args.interactorObject);
 
+            // 離した手のポーズをクリア
+            GetHandPose(args.interactorObject)?.ClearGripOverride();
+
+            // 片手が離れたらもう片方も強制解放
             if (m_CurrentInteractors.Count > 0)
                 ForceReleaseAll();
         }
 
         void ForceReleaseAll()
         {
-            m_LeftHandPose?.ClearGripOverride();
-            m_RightHandPose?.ClearGripOverride();
-
             var toRelease = new List<IXRSelectInteractor>(m_CurrentInteractors);
             m_CurrentInteractors.Clear();
             foreach (var interactor in toRelease)
                 m_Grab.interactionManager.SelectExit(interactor, m_Grab);
+        }
+
+        // インタラクターの階層名から左右どちらの HandPoseAnimator を返す
+        HandPoseAnimator GetHandPose(IXRSelectInteractor interactor)
+        {
+            var t = interactor.transform;
+            while (t != null)
+            {
+                if (t.name.Contains("Left"))  return m_LeftHandPose;
+                if (t.name.Contains("Right")) return m_RightHandPose;
+                t = t.parent;
+            }
+            return null;
         }
     }
 }
