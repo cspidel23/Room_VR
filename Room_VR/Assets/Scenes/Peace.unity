@@ -824,7 +824,7 @@ Transform:
   m_LocalRotation: {x: -0.5, y: -0.8660254, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 141752066}
   - {fileID: 524462705}
@@ -847,37 +847,50 @@ MonoBehaviour:
     - {fileID: 1469606194}
     - {fileID: 1616932665}
     - {fileID: 1830829993}
-    curlAxis: {x: 0, y: 0, z: 1}
-    maxCurlAngle: 60
-    grabCurlAngle: 45
+    - {fileID: 962284747}
+    curlAxis: {x: 1, y: -0.4, z: 0}
+    maxCurlAngle: 40
+    grabCurlAngle: 0.1
   m_Index:
     joints:
     - {fileID: 1484256844}
     - {fileID: 1288183989}
+    - {fileID: 1324567443}
+    - {fileID: 1495249063}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 50
+    grabCurlAngle: 15.2
   m_Middle:
     joints:
     - {fileID: 123693424}
     - {fileID: 409452091}
+    - {fileID: 1937735301}
+    - {fileID: 532165237}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 70
+    grabCurlAngle: 60
   m_Ring:
     joints:
     - {fileID: 689458557}
     - {fileID: 801668196}
+    - {fileID: 990731219}
+    - {fileID: 877023765}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 70
+    grabCurlAngle: 65.7
   m_Pinky:
     joints:
     - {fileID: 77644580}
     - {fileID: 144960285}
+    - {fileID: 1730546343}
+    - {fileID: 1361649294}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 70
+    grabCurlAngle: 60
+  m_Wrist: {fileID: 141752066}
+  m_GrabWristPose:
+    rotationEuler: {x: 10, y: -30.5, z: 25}
+    positionOffset: {x: 5, y: -0.5, z: -1.91}
   m_GripInput:
     m_InputSourceMode: 2
     m_InputAction:
@@ -1940,7 +1953,7 @@ Transform:
   m_GameObject: {fileID: 183876203}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.555, z: 0.315}
+  m_LocalPosition: {x: 0.3, y: 0.555, z: 0.512}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3354,7 +3367,7 @@ Transform:
   m_GameObject: {fileID: 324026135}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.397, y: 1.099, z: -0.453}
+  m_LocalPosition: {x: -0.397, y: 0.70500004, z: -0.453}
   m_LocalScale: {x: 0.14, y: 0.06, z: 0.24}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3927,7 +3940,7 @@ Transform:
   m_GameObject: {fileID: 361676748}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.40764832, y: 0.488, z: -0.451}
+  m_LocalPosition: {x: -0.40764832, y: 0.094, z: -0.451}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5991,7 +6004,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 131375038}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -22591,40 +22604,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Thumb:
     joints:
-    - {fileID: 2041920838}
     - {fileID: 977688981}
     - {fileID: 1652211702}
-    curlAxis: {x: 0, y: 0, z: 1}
-    maxCurlAngle: 60
-    grabCurlAngle: 45
+    - {fileID: 1591983128}
+    - {fileID: 1935268662}
+    curlAxis: {x: 1, y: 0.4, z: 0}
+    maxCurlAngle: 40
+    grabCurlAngle: 0.1
   m_Index:
     joints:
     - {fileID: 1169784395}
     - {fileID: 934187995}
+    - {fileID: 1591983128}
+    - {fileID: 1510057006}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 50
+    grabCurlAngle: 15.2
   m_Middle:
     joints:
     - {fileID: 1351687857}
     - {fileID: 1799980454}
+    - {fileID: 252336444}
+    - {fileID: 850897964}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 70
+    grabCurlAngle: 60
   m_Ring:
     joints:
     - {fileID: 1154926204}
     - {fileID: 1290106808}
+    - {fileID: 1912055047}
+    - {fileID: 637558056}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 70
+    grabCurlAngle: 65.7
   m_Pinky:
     joints:
     - {fileID: 1720429850}
     - {fileID: 1446465406}
+    - {fileID: 1478862776}
+    - {fileID: 1510057006}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 70
+    grabCurlAngle: 60
+  m_Wrist: {fileID: 551885780}
+  m_GrabWristPose:
+    rotationEuler: {x: 10, y: 30.5, z: -25}
+    positionOffset: {x: -2.34, y: -0.5, z: -1.91}
   m_GripInput:
     m_InputSourceMode: 2
     m_InputAction:
@@ -23227,7 +23253,7 @@ Transform:
   m_GameObject: {fileID: 2046775790}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.555, z: -0.225}
+  m_LocalPosition: {x: 0.3, y: 0.8, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
