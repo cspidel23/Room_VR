@@ -821,7 +821,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 131375037}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5, y: -0.8660254, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.5, w: 0.8660254}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -829,7 +829,7 @@ Transform:
   - {fileID: 141752066}
   - {fileID: 524462705}
   m_Father: {fileID: 334820741}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 60}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60}
 --- !u!114 &131375039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,7 +890,7 @@ MonoBehaviour:
   m_Wrist: {fileID: 141752066}
   m_GrabWristPose:
     rotationEuler: {x: 10, y: -30.5, z: 25}
-    positionOffset: {x: 5, y: -0.5, z: -1.91}
+    positionOffset: {x: 5, y: -0.5, z: -6.86}
   m_GripInput:
     m_InputSourceMode: 2
     m_InputAction:
@@ -3346,6 +3346,8 @@ MonoBehaviour:
     m_Flags: 0
   m_LeftHandPose: {fileID: 131375039}
   m_RightHandPose: {fileID: 2003851032}
+  m_LeftHandModel: {fileID: 131375038}
+  m_RightHandModel: {fileID: 2003851033}
   m_MiniGame: {fileID: 1081348855}
 --- !u!114 &324026137
 MonoBehaviour:
@@ -16858,6 +16860,18 @@ PrefabInstance:
       propertyPath: m_FarInteractionCaster
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1871916905115650005, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871916905115650005, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1871916905115650005, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2243020122175513880, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -16968,6 +16982,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3051491437750746931, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3997160942596605598, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3997160942596605598, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3997160942596605598, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4022796369627591441, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
@@ -24221,7 +24247,7 @@ MonoBehaviour:
   m_Wrist: {fileID: 551885780}
   m_GrabWristPose:
     rotationEuler: {x: 10, y: 30.5, z: -25}
-    positionOffset: {x: -2.34, y: -0.5, z: -1.91}
+    positionOffset: {x: -2.34, y: -0.5, z: -6.91}
   m_GripInput:
     m_InputSourceMode: 2
     m_InputAction:
@@ -24258,7 +24284,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003851031}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5, y: -0.8660254, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.5, w: 0.8660254}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24266,7 +24292,7 @@ Transform:
   - {fileID: 551885780}
   - {fileID: 183237870}
   m_Father: {fileID: 2005619590}
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 60}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60}
 --- !u!4 &2005619590 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3997160942596605598, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}

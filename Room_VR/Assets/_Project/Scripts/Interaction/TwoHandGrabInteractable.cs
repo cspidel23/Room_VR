@@ -16,6 +16,9 @@ namespace RoomVR.Interaction
         [Tooltip("Attach point used when the right hand grabs.")]
         Transform m_RightHandAttach;
 
+        public Transform LeftHandAttach  => m_LeftHandAttach;
+        public Transform RightHandAttach => m_RightHandAttach;
+
         public override Transform GetAttachTransform(IXRInteractor interactor)
         {
             if (IsLeftHand(interactor) && m_LeftHandAttach != null)
