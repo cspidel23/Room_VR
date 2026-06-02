@@ -6,6 +6,12 @@ namespace RoomVR.MiniGame
     public class DroppingGameGoal : MonoBehaviour
     {
         [SerializeField] private bool permanent = false;
+
+        private void Start()
+        {
+            DroppingGameController.Instance.RegisterGoal(this);
+        }
+
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("DroppingObject"))
