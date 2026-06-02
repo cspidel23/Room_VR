@@ -22,6 +22,17 @@ namespace RoomVR.Interaction
         // ── Finger Bones ─────────────────────────────────────────────────────────
 
         [Serializable]
+        public struct JointGrabPose
+        {
+            [Tooltip("Curl axis (orientation) for this joint during grab. Zero = fall back to the finger's curlAxis / grabCurlAngle.")]
+            public Vector3 curlAxis;
+
+            [Tooltip("Curl angle for this joint during grab (degrees). Acts as the per-joint weight/amount.")]
+            [Range(-180f, 180f)]
+            public float curlAngle;
+        }
+
+        [Serializable]
         public struct FingerBones
         {
             [Tooltip("Joints from proximal to distal.")]
@@ -37,6 +48,11 @@ namespace RoomVR.Interaction
             [Tooltip("Fixed curl angle when holding the controller prop. 0 = use maxCurlAngle.")]
             [Range(0f, 180f)]
             public float grabCurlAngle;
+
+            [Tooltip("Optional per-joint grab pose. Each entry matches 'joints' by index; when its " +
+                     "curlAxis is non-zero it overrides curlAxis/grabCurlAngle for that joint only. " +
+                     "Use this to fine-tune each joint's bend and orientation (e.g. the thumb resting on the stick).")]
+            public JointGrabPose[] grabJoints;
         }
 
         [Header("Finger Bones")]
@@ -149,16 +165,53 @@ namespace RoomVR.Interaction
         {
             if (finger.joints == null) return;
 
-            var targetAngle = isGrabbing && finger.grabCurlAngle > 0f
-                ? finger.grabCurlAngle
-                : t * finger.maxCurlAngle;
+            var airAngle = t * finger.maxCurlAngle;
 
-            foreach (var joint in finger.joints)
+            for (var i = 0; i < finger.joints.Length; i++)
             {
+                var joint = finger.joints[i];
                 if (joint == null) continue;
                 if (!m_OriginalRotations.TryGetValue(joint, out var original)) continue;
-                joint.localRotation = original * Quaternion.AngleAxis(targetAngle, finger.curlAxis);
+
+                Vector3 axis;
+                float angle;
+
+                if (isGrabbing && TryGetJointGrab(finger, i, out var jointAxis, out var jointAngle))
+                {
+                    // Per-joint grab override: independent angle (weight) and axis (orientation).
+                    axis = jointAxis;
+                    angle = jointAngle;
+                }
+                else if (isGrabbing && finger.grabCurlAngle > 0f)
+                {
+                    axis = finger.curlAxis;
+                    angle = finger.grabCurlAngle;
+                }
+                else
+                {
+                    axis = finger.curlAxis;
+                    angle = airAngle;
+                }
+
+                joint.localRotation = original * Quaternion.AngleAxis(angle, axis);
             }
+        }
+
+        // Returns the per-joint grab override for joints[index] if one is configured
+        // (i.e. its curlAxis is non-zero). Otherwise the finger-level pose is used.
+        static bool TryGetJointGrab(FingerBones finger, int index, out Vector3 axis, out float angle)
+        {
+            axis = default;
+            angle = 0f;
+
+            if (finger.grabJoints == null || index >= finger.grabJoints.Length) return false;
+
+            var jp = finger.grabJoints[index];
+            if (jp.curlAxis.sqrMagnitude < 1e-6f) return false;
+
+            axis = jp.curlAxis;
+            angle = jp.curlAngle;
+            return true;
         }
 
         // Adds m_ThumbOverlay on top of the thumb's proximal joint so button / stick
