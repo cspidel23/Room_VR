@@ -26,6 +26,15 @@ namespace RoomVR.Interaction
         [Tooltip("Fire buttons. Configure bindings in the Inspector.")]
         InputAction m_FireAction = new InputAction(name: "Fire", type: InputActionType.Button);
 
+        [Header("Hand Pose")]
+        [SerializeField]
+        [Tooltip("HandPoseAnimator on the left hand model. Forces grip pose when prop is held.")]
+        HandPoseAnimator m_LeftHandPose;
+
+        [SerializeField]
+        [Tooltip("HandPoseAnimator on the right hand model. Forces grip pose when prop is held.")]
+        HandPoseAnimator m_RightHandPose;
+
         [Header("Game")]
         [SerializeField]
         [Tooltip("Any MiniGameBase implementation. Swap to change the active game.")]
@@ -76,8 +85,14 @@ namespace RoomVR.Interaction
             if (!m_CurrentInteractors.Contains(args.interactorObject))
                 m_CurrentInteractors.Add(args.interactorObject);
 
-            if (BothHandsGrabbing && m_MiniGame != null && !m_MiniGame.IsActive)
-                m_MiniGame.StartGame();
+            if (BothHandsGrabbing)
+            {
+                m_LeftHandPose?.SetGripOverride(1f);
+                m_RightHandPose?.SetGripOverride(1f);
+
+                if (m_MiniGame != null && !m_MiniGame.IsActive)
+                    m_MiniGame.StartGame();
+            }
         }
 
         void OnSelectExited(SelectExitEventArgs args)
@@ -90,6 +105,9 @@ namespace RoomVR.Interaction
 
         void ForceReleaseAll()
         {
+            m_LeftHandPose?.ClearGripOverride();
+            m_RightHandPose?.ClearGripOverride();
+
             var toRelease = new List<IXRSelectInteractor>(m_CurrentInteractors);
             m_CurrentInteractors.Clear();
             foreach (var interactor in toRelease)
