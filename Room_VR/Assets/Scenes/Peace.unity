@@ -847,13 +847,15 @@ MonoBehaviour:
     - {fileID: 1469606194}
     - {fileID: 1616932665}
     - {fileID: 1830829993}
-    curlAxis: {x: 0, y: 0, z: 1}
-    maxCurlAngle: 60
+    curlAxis: {x: 1, y: -0.4, z: 0}
+    maxCurlAngle: 40
     grabCurlAngle: 45
   m_Index:
     joints:
     - {fileID: 1484256844}
     - {fileID: 1288183989}
+    - {fileID: 1324567443}
+    - {fileID: 1495249063}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 50
@@ -861,6 +863,8 @@ MonoBehaviour:
     joints:
     - {fileID: 123693424}
     - {fileID: 409452091}
+    - {fileID: 1937735301}
+    - {fileID: 532165237}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 70
@@ -868,6 +872,8 @@ MonoBehaviour:
     joints:
     - {fileID: 689458557}
     - {fileID: 801668196}
+    - {fileID: 990731219}
+    - {fileID: 877023765}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 70
@@ -875,6 +881,8 @@ MonoBehaviour:
     joints:
     - {fileID: 77644580}
     - {fileID: 144960285}
+    - {fileID: 1730546343}
+    - {fileID: 1361649294}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 70
@@ -1940,7 +1948,7 @@ Transform:
   m_GameObject: {fileID: 183876203}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.555, z: 0.315}
+  m_LocalPosition: {x: 0.3, y: 0.555, z: 0.512}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22594,13 +22602,15 @@ MonoBehaviour:
     - {fileID: 2041920838}
     - {fileID: 977688981}
     - {fileID: 1652211702}
-    curlAxis: {x: 0, y: 0, z: 1}
-    maxCurlAngle: 60
+    curlAxis: {x: 1, y: 0.4, z: 0}
+    maxCurlAngle: 40
     grabCurlAngle: 45
   m_Index:
     joints:
     - {fileID: 1169784395}
     - {fileID: 934187995}
+    - {fileID: 1591983128}
+    - {fileID: 1510057006}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 50
@@ -22608,6 +22618,8 @@ MonoBehaviour:
     joints:
     - {fileID: 1351687857}
     - {fileID: 1799980454}
+    - {fileID: 252336444}
+    - {fileID: 850897964}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 70
@@ -22615,6 +22627,8 @@ MonoBehaviour:
     joints:
     - {fileID: 1154926204}
     - {fileID: 1290106808}
+    - {fileID: 1912055047}
+    - {fileID: 637558056}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 70
@@ -22622,6 +22636,8 @@ MonoBehaviour:
     joints:
     - {fileID: 1720429850}
     - {fileID: 1446465406}
+    - {fileID: 1478862776}
+    - {fileID: 1510057006}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 70
@@ -23227,7 +23243,7 @@ Transform:
   m_GameObject: {fileID: 2046775790}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.555, z: -0.225}
+  m_LocalPosition: {x: 0.3, y: 0.555, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
