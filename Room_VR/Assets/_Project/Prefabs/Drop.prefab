@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a1a6a4b36ada9f439454ab19db5e2d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_BlastPrefab: {fileID: 6385398069036547557, guid: 79f1a3b4d89a1834f944908aca99423b, type: 3}
 --- !u!33 &2424252302173502617
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -120,7 +121,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.0000002
+  m_Radius: 0.5
   m_Center: {x: 0.000000059604645, y: 0, z: 0.0000018179417}
 --- !u!54 &5645495337783916215
 Rigidbody:
@@ -130,7 +131,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5139356112847351022}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

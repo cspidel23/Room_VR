@@ -14,6 +14,12 @@ namespace RoomVR.MiniGame
             // randomly set the starting direction to left or right
             m_Direction = Random.value < 0.5f ? -1f : 1f;
         }
+
+        private void Start()
+        {
+            DroppingGameController.Instance.RegisterPlatform(this);
+        }
+
         private void Update()
         {
             var pos = transform.localPosition;
@@ -24,6 +30,18 @@ namespace RoomVR.MiniGame
                 m_Direction *= -1f;
             }
             transform.localPosition = pos;
+        }
+
+        public void IncreaseSpeed(float amount, bool isMultiplier = false)
+        {
+            if (!isMultiplier)
+            {
+                m_MoveSpeed += amount;
+            }
+            else
+            {
+                m_MoveSpeed *= amount;
+            }
         }
     }
 }

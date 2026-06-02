@@ -2,14 +2,15 @@ using UnityEngine;
 
 namespace RoomVR.MiniGame
 {
-    public class DroppingGameGoal : MonoBehaviour
+    public class DroppingGameObstacle : MonoBehaviour
     {
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("DroppingObject"))
             {
-                MiniGameAudioController.Instance.PlayDropAudio();
-                DroppingGameController.Instance.OnTargetHit(2);
+                MiniGameAudioController.Instance.PlayBlastAudio();
+                DroppingGameController.Instance.OnTargetHit();
+                other.GetComponent<DroppingObject>().Blast();
                 Destroy(other.gameObject);
             }
         }
