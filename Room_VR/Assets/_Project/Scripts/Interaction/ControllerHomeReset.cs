@@ -92,6 +92,15 @@ namespace RoomVR.Interaction
             m_Returning = null;
         }
 
+        // Snaps the prop back to its home pose immediately. Useful to wire into a phase
+        // transition (e.g. GamePhaseDirector.OnFadedToBlack) so it resets while hidden.
+        public void ReturnHomeNow()
+        {
+            StopReturning();
+            transform.SetPositionAndRotation(m_HomePosition, m_HomeRotation);
+            FreezeAtRest();
+        }
+
         void StopReturning()
         {
             if (m_Returning == null) return;

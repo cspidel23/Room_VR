@@ -40,6 +40,9 @@ namespace RoomVR.MiniGame
         private bool isMovingLeft = false;
         private int m_CurrentSpriteIndex = 0;
 
+        private Vector3 m_PlayerStartLocalPos;
+        private bool m_HasPlayerStart;
+
         private void Awake()
         {
             if (Instance == null)
@@ -49,6 +52,11 @@ namespace RoomVR.MiniGame
         }
         private void Start()
         {
+            if (m_Player != null)
+            {
+                m_PlayerStartLocalPos = m_Player.localPosition;
+                m_HasPlayerStart = true;
+            }
             UpdateScoreText();
         }
         private void Update()
@@ -110,6 +118,36 @@ namespace RoomVR.MiniGame
         public override void StopGame()
         {
             m_IsActive = false;
+        }
+
+        // Returns the game to its initial state: score, player position, platform speeds,
+        // input/animation timers, and clears any drops still in flight. Layout/difficulty
+        // tuning per phase can be layered on top of this later.
+        public override void ResetGame()
+        {
+            m_IsActive = false;
+            m_QueneInput = false;
+            timer = 0f;
+            animTimer = 0f;
+            isMovingLeft = false;
+            m_CurrentSpriteIndex = 0;
+
+            m_Score = 0;
+            UpdateScoreText();
+
+            if (m_HasPlayerStart && m_Player != null)
+                m_Player.localPosition = m_PlayerStartLocalPos;
+
+            foreach (var platform in m_Platforms)
+                if (platform != null) platform.ResetSpeed();
+
+            // Restore every target (hidden when hit) back to its initial state.
+            foreach (var goal in m_Goals)
+                if (goal != null) goal.ResetGoal();
+
+            // Remove any falling drops left over from the previous round.
+            foreach (var drop in FindObjectsByType<DroppingObject>(FindObjectsSortMode.None))
+                if (drop != null) Destroy(drop.gameObject);
         }
 
         // takes input x, y and converts to coordinates x, z
