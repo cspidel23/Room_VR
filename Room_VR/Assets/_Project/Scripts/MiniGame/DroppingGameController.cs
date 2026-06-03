@@ -7,11 +7,17 @@ namespace RoomVR.MiniGame
     public class DroppingGameController : MiniGameBase
     {
         public static DroppingGameController Instance { get; private set; }
+        [Header("Setup Settings")]
+        [SerializeField] private bool isTest = false;
         [SerializeField] private bool m_InvertControls = false;
+
+        [Header("Player Settings")]
         [SerializeField] private Transform m_Player;
         [SerializeField] private float m_PlayfieldHalfSize = 4.25f;
-
         [SerializeField] private GameObject m_dropPrefab;
+        [SerializeField] private float dropCooldown = 0.5f;
+        [SerializeField] private float animCooldown = 0.25f; // add up to an additional .25 range by random
+
 
         private List<DroppingGamePlatform> m_Platforms = new List<DroppingGamePlatform>();
         private List<DroppingGameGoal> m_Goals = new List<DroppingGameGoal>();
@@ -23,11 +29,9 @@ namespace RoomVR.MiniGame
         public override bool IsActive => m_IsActive;
 
         private float timer = 0f;
-        private float dropCooldown = 0.5f;
-
         private float animTimer = 0f;
-        [SerializeField] private float animCooldown = 0.25f; // add up to an additional .25 range by random
 
+        [Header("Visual Settings")]
         private int score;
         [SerializeField] private TextMeshProUGUI m_ScoreText;
 
@@ -49,6 +53,13 @@ namespace RoomVR.MiniGame
         }
         private void Update()
         {
+            if (isTest)
+            {
+                m_QueneInput = true;
+                Vector2 rand = new Vector2(Random.Range(-9, 10), 0);
+                OnStickInput(rand);
+            }
+
             // we want a timer cooldown to prevent the player from spamming drop
             timer += Time.deltaTime;
             if (m_QueneInput)
@@ -104,7 +115,7 @@ namespace RoomVR.MiniGame
         // takes input x, y and converts to coordinates x, z
         public override void OnStickInput(Vector2 input)
         {
-            if (!m_IsActive)
+            if (!m_IsActive && !isTest)
                 return;
 
             var delta = new Vector3(input.x, 0f, 0f) * (m_PlayerSpeed * Time.deltaTime);

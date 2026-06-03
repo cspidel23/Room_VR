@@ -16,6 +16,12 @@ namespace RoomVR.MiniGame
         {
             if (other.CompareTag("DroppingObject"))
             {
+                // if in a scene with no OutsideConnectionController, will simply not fire
+                if(OutsideConnectionController.Instance != null)
+                {
+                    OutsideConnectionController.Instance.TriggerExplosionEffect();
+                }
+                
                 AudioController.Instance.PlayDropAudio();
                 DroppingGameController.Instance.OnTargetHit(2);
                 Destroy(other.gameObject);
