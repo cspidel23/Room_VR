@@ -23,10 +23,6 @@ namespace RoomVR.MiniGame
         // Called when the controller is released.
         public abstract void StopGame();
 
-        // Resets the game to its initial state (score, layout, difficulty). Override to use.
-        // Called by GamePhaseDirector when a new phase begins, while the screen is black.
-        public virtual void ResetGame() { }
-
         // Called every frame with left-stick value. Override to use.
         public virtual void OnStickInput(Vector2 input) { }
 
