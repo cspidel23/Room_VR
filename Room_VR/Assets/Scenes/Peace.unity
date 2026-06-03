@@ -245,7 +245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 35751169}
   m_Layer: 0
-  m_Name: polySurface88
+  m_Name: Batsu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -851,6 +851,15 @@ MonoBehaviour:
     curlAxis: {x: 1, y: -0.4, z: 0}
     maxCurlAngle: 40
     grabCurlAngle: 0.1
+    grabJoints:
+    - curlAxis: {x: 0, y: 0, z: 0}
+      curlAngle: 0
+    - curlAxis: {x: 0, y: 0, z: 0}
+      curlAngle: 0
+    - curlAxis: {x: 0, y: 0, z: 0}
+      curlAngle: 0
+    - curlAxis: {x: 0, y: 0, z: 0}
+      curlAngle: 0
   m_Index:
     joints:
     - {fileID: 1484256844}
@@ -860,6 +869,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 15.2
+    grabJoints: []
   m_Middle:
     joints:
     - {fileID: 123693424}
@@ -869,6 +879,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 60
+    grabJoints: []
   m_Ring:
     joints:
     - {fileID: 689458557}
@@ -878,6 +889,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 65.7
+    grabJoints: []
   m_Pinky:
     joints:
     - {fileID: 77644580}
@@ -887,6 +899,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 60
+    grabJoints: []
   m_Wrist: {fileID: 141752066}
   m_GrabWristPose:
     rotationEuler: {x: 10, y: -30.5, z: 25}
@@ -1362,37 +1375,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151510397}
   m_CullTransparentMesh: 1
---- !u!1 &163413374
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 163413375}
-  m_Layer: 0
-  m_Name: polySurface73
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &163413375
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 163413374}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1698472167}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &164130870
 GameObject:
   m_ObjectHideFlags: 0
@@ -2548,7 +2530,6 @@ Transform:
   - {fileID: 54742567}
   - {fileID: 512002103}
   - {fileID: 1384563835}
-  - {fileID: 1698472167}
   - {fileID: 518428284}
   - {fileID: 1707868067}
   - {fileID: 1886569324}
@@ -2556,6 +2537,7 @@ Transform:
   - {fileID: 1843397988}
   - {fileID: 1134221018}
   - {fileID: 667670110}
+  - {fileID: 328424643}
   - {fileID: 557267037}
   - {fileID: 1443189654}
   - {fileID: 1457885389}
@@ -2565,7 +2547,6 @@ Transform:
   - {fileID: 2137989490}
   - {fileID: 205088181}
   - {fileID: 1467744202}
-  - {fileID: 1848167123}
   - {fileID: 623958279}
   - {fileID: 1803747506}
   - {fileID: 466268481}
@@ -3283,6 +3264,7 @@ GameObject:
   - component: {fileID: 324026138}
   - component: {fileID: 324026137}
   - component: {fileID: 324026136}
+  - component: {fileID: 324026143}
   m_Layer: 0
   m_Name: GrabbableGameController
   m_TagString: Untagged
@@ -3577,6 +3559,115 @@ Transform:
   - {fileID: 2046775791}
   - {fileID: 697645145}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &324026143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324026135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93074fdcc88866a40b2a7dcc5a5df214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GrabHandler: {fileID: 324026136}
+  m_CircleInput:
+    m_Name: Circle
+    m_Type: 0
+    m_ExpectedControlType: Button
+    m_Id: 7d1fb4b3-8152-487e-b1f0-30a9a84a8beb
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: c0035549-048f-44eb-b89e-bd56b2f8ec0b
+      m_Path: <XRController>{RightHand}/{PrimaryButton}
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Circle
+      m_Flags: 0
+    m_Flags: 0
+  m_CrossInput:
+    m_Name: Cross
+    m_Type: 0
+    m_ExpectedControlType: Button
+    m_Id: ea793003-22d8-4641-a80c-983bb22fc316
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 5379844c-5c35-450d-a788-d884e1e5a244
+      m_Path: <XRController>{RightHand}/secondaryButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Cross
+      m_Flags: 0
+    m_Flags: 0
+  m_StickInput:
+    m_Name: ModelStick
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: b2c5f0e3-e5cd-467e-98ac-5d701c0acb04
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 7e8f0838-59ee-48fd-92bc-af8bc68e09dc
+      m_Path: <XRController>{LeftHand}/{Primary2DAxis}
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: ModelStick
+      m_Flags: 0
+    m_Flags: 0
+  m_CircleButton: {fileID: 1600348596}
+  m_CrossButton: {fileID: 35751169}
+  m_ButtonPressedOffset: {x: 0, y: -0.02, z: 0}
+  m_Stick: {fileID: 328424643}
+  m_StickRotationRange: {x: 30, y: 100}
+  m_StickRotateAroundCenter: 1
+  m_StickPivotOffset: {x: 0, y: 0, z: 0}
+  m_ButtonHand: {fileID: 2003851032}
+  m_StickHand: {fileID: 131375039}
+  m_ThumbButtonCurlAngle: 5
+  m_ThumbButtonCurlAxis: {x: 1, y: -1, z: 0}
+  m_ThumbStickTiltAngle: {x: 0, y: 12}
+--- !u!1 &328424642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 328424643}
+  m_Layer: 0
+  m_Name: Stick
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &328424643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328424642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1698472167}
+  - {fileID: 1848167123}
+  m_Father: {fileID: 245296747}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &329674977
 GameObject:
@@ -19985,7 +20076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1600348596}
   m_Layer: 0
-  m_Name: polySurface89
+  m_Name: Maru
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20859,16 +20950,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1698472166}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.00000011920926, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1440682885}
-  - {fileID: 163413375}
   - {fileID: 599945780}
-  - {fileID: 2020173656}
-  m_Father: {fileID: 245296747}
+  m_Father: {fileID: 328424643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1698974880
 GameObject:
@@ -22459,7 +22548,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 492685121}
-  m_Father: {fileID: 245296747}
+  m_Father: {fileID: 328424643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1848498620
 GameObject:
@@ -24208,6 +24297,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0.4, z: 0}
     maxCurlAngle: 40
     grabCurlAngle: 0.1
+    grabJoints: []
   m_Index:
     joints:
     - {fileID: 1169784395}
@@ -24217,6 +24307,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 15.2
+    grabJoints: []
   m_Middle:
     joints:
     - {fileID: 1351687857}
@@ -24226,6 +24317,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 60
+    grabJoints: []
   m_Ring:
     joints:
     - {fileID: 1154926204}
@@ -24235,6 +24327,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 65.7
+    grabJoints: []
   m_Pinky:
     joints:
     - {fileID: 1720429850}
@@ -24244,6 +24337,7 @@ MonoBehaviour:
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
     grabCurlAngle: 60
+    grabJoints: []
   m_Wrist: {fileID: 551885780}
   m_GrabWristPose:
     rotationEuler: {x: 10, y: 30.5, z: -25}
@@ -24566,37 +24660,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2018379304}
   m_CullTransparentMesh: 0
---- !u!1 &2020173655
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2020173656}
-  m_Layer: 0
-  m_Name: polySurface75
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2020173656
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2020173655}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.027341556, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1698472167}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2026382144
 GameObject:
   m_ObjectHideFlags: 0
