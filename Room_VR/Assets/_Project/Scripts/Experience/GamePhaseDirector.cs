@@ -81,10 +81,31 @@ namespace RoomVR.Experience
         [Tooltip("Invoked after the new phase has fully faded back in.")]
         UnityEvent m_OnFadedIn;
 
+        // Global access so any script can query the current phase (matches the
+        // Instance pattern used by AudioController / OutsideConnectionController etc.).
+        public static GamePhaseDirector Instance { get; private set; }
+
         public Phase CurrentPhase { get; private set; } = Phase.Peaceful;
         public event Action<Phase> PhaseChanged;
 
+        // Convenience checks. Static ones are null-safe so callers can write
+        // GamePhaseDirector.InWar from anywhere.
+        public bool IsWar => CurrentPhase == Phase.War;
+        public bool IsPeaceful => CurrentPhase == Phase.Peaceful;
+        public static bool InWar => Instance != null && Instance.CurrentPhase == Phase.War;
+        public static bool InPeaceful => Instance != null && Instance.CurrentPhase == Phase.Peaceful;
+
         bool m_Busy;
+
+        void Awake()
+        {
+            if (Instance == null) Instance = this;
+        }
+
+        void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
 
         void OnEnable()
         {

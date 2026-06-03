@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using RoomVR.Experience;
 
 // this handles all outside connections from the minigame to the real world, primarily the outside explosion blasts consisting of audio, screenshake, and lighting flashes. 
 public class OutsideConnectionController : MonoBehaviour
@@ -73,6 +74,9 @@ public class OutsideConnectionController : MonoBehaviour
     // single method to trigger the explosion effects
     public void TriggerExplosionEffect()
     {
+        var director = GamePhaseDirector.Instance;
+        if (director != null && !director.IsWar) return;
+
         TriggerOutsideAudio();
         TriggerLightFlash();
         TriggerScreenShake();
