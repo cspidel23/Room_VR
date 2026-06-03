@@ -847,17 +847,16 @@ MonoBehaviour:
     - {fileID: 1469606194}
     - {fileID: 1616932665}
     - {fileID: 1830829993}
-    - {fileID: 962284747}
     curlAxis: {x: 1, y: -0.4, z: 0}
     maxCurlAngle: 40
     grabCurlAngle: 0.1
     grabJoints:
+    - curlAxis: {x: -0.04, y: 0.1, z: 0}
+      curlAngle: 21
     - curlAxis: {x: 0, y: 0, z: 0}
       curlAngle: 0
-    - curlAxis: {x: 0, y: 0, z: 0}
-      curlAngle: 0
-    - curlAxis: {x: 0, y: 0, z: 0}
-      curlAngle: 0
+    - curlAxis: {x: 1.53, y: 0, z: 0}
+      curlAngle: 42
     - curlAxis: {x: 0, y: 0, z: 0}
       curlAngle: 0
   m_Index:
@@ -868,7 +867,7 @@ MonoBehaviour:
     - {fileID: 1495249063}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 15.2
+    grabCurlAngle: 10.8
     grabJoints: []
   m_Middle:
     joints:
@@ -878,7 +877,7 @@ MonoBehaviour:
     - {fileID: 532165237}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 60
+    grabCurlAngle: 54.4
     grabJoints: []
   m_Ring:
     joints:
@@ -888,7 +887,7 @@ MonoBehaviour:
     - {fileID: 877023765}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 65.7
+    grabCurlAngle: 51.6
     grabJoints: []
   m_Pinky:
     joints:
@@ -898,12 +897,12 @@ MonoBehaviour:
     - {fileID: 1361649294}
     curlAxis: {x: 1, y: 0, z: 0}
     maxCurlAngle: 80
-    grabCurlAngle: 60
+    grabCurlAngle: 53.8
     grabJoints: []
   m_Wrist: {fileID: 141752066}
   m_GrabWristPose:
     rotationEuler: {x: 10, y: -30.5, z: 25}
-    positionOffset: {x: 5, y: -0.5, z: -6.86}
+    positionOffset: {x: 5, y: -0.5, z: -7.58}
   m_GripInput:
     m_InputSourceMode: 2
     m_InputAction:
