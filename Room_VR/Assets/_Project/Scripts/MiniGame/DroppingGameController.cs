@@ -24,7 +24,7 @@ namespace RoomVR.MiniGame
 
         private float m_PlayerSpeed = 3f;
         private bool m_IsActive;
-        private int m_Score;
+        public int m_Score { get; private set; }
         private bool m_QueneInput = false;
         public override bool IsActive => m_IsActive;
 

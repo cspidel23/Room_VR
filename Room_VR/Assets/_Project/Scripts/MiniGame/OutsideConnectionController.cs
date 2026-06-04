@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using RoomVR.Experience;
+using RoomVR.MiniGame;
 
 // this handles all outside connections from the minigame to the real world, primarily the outside explosion blasts consisting of audio, screenshake, and lighting flashes. 
 public class OutsideConnectionController : MonoBehaviour
@@ -58,8 +59,13 @@ public class OutsideConnectionController : MonoBehaviour
     private IEnumerator TestExplosion()
     {
         yield return new WaitForSeconds(Random.Range(m_minRandBlast, m_maxRandBlast));
-        TriggerExplosionEffect(m_randBlastMultiplier);
+        var director = GamePhaseDirector.Instance;
+        if (!(director != null && !director.IsWar))
+        {
+            TriggerExplosionEffect(m_randBlastMultiplier);
+        }
         StartCoroutine(TestExplosion());
+
     }
 
     // single method to trigger the explosion effects
@@ -68,8 +74,11 @@ public class OutsideConnectionController : MonoBehaviour
         var director = GamePhaseDirector.Instance;
         if (director != null && !director.IsWar) return;
 
+        // grab score multiplier
+        float scoreMult = .25f + .25f * DroppingGameController.Instance.m_Score;
+
         // a random multiplier on intensity of the various actions
-        float multiplier = Random.Range(m_minIntensityMultiplier, m_maxIntensityMultiplier) * blastMultiplier;
+        float multiplier = Random.Range(m_minIntensityMultiplier, m_maxIntensityMultiplier) * blastMultiplier * scoreMult;
 
         TriggerOutsideAudio(multiplier); // ignore this one for now
         TriggerLightFlash(multiplier);
@@ -93,8 +102,8 @@ public class OutsideConnectionController : MonoBehaviour
     private void AudioInstantiate(GameObject audioClip, Transform position, float multiplier)
     {
         GameObject clip = Instantiate(audioClip, position.position, Quaternion.identity);
-        clip.GetComponent<AudioSource>().volume *= multiplier;
-        Destroy(clip, 5f);
+        clip.GetComponent<AudioSource>().volume *= multiplier * 10000;
+        Destroy(clip, 10f);
     }
 
     private void TriggerLightFlash(float multiplier = 1f)
