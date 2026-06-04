@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using RoomVR.MiniGame;
 
 namespace RoomVR.Experience
@@ -81,6 +82,16 @@ namespace RoomVR.Experience
         [Tooltip("Invoked after the new phase has fully faded back in.")]
         UnityEvent m_OnFadedIn;
 
+        [Header("Cleared -> Transition")]
+        [SerializeField]
+        [Tooltip("After the game is cleared, transition this many seconds later at the latest.")]
+        float m_ClearedHoldSeconds = 10f;
+
+        [SerializeField]
+        [Tooltip("Controller grab. Releasing it (placing it down) after a clear triggers the " +
+                 "transition early. Leave empty to only use the timer.")]
+        XRGrabInteractable m_ControllerGrab;
+
         // Global access so any script can query the current phase (matches the
         // Instance pattern used by AudioController / OutsideConnectionController etc.).
         public static GamePhaseDirector Instance { get; private set; }
@@ -96,6 +107,10 @@ namespace RoomVR.Experience
         public static bool InPeaceful => Instance != null && Instance.CurrentPhase == Phase.Peaceful;
 
         bool m_Busy;
+
+        // After a clear we wait (timer or controller release) before actually transitioning.
+        bool m_PendingTransition;
+        float m_ClearedTime;
 
         void Awake()
         {
@@ -138,10 +153,26 @@ namespace RoomVR.Experience
             SetHidden(false);
         }
 
+        // The game raises this on clear. We don't transition immediately: instead we wait
+        // until the player puts the controller down OR the hold timer elapses (Update).
         void HandleCleared()
         {
-            if (m_Busy) return;
+            if (m_Busy || m_PendingTransition) return;
+            if (CurrentPhase == Phase.Ending) return;
 
+            m_PendingTransition = true;
+            m_ClearedTime = Time.time;
+        }
+
+        void Update()
+        {
+            if (!m_PendingTransition || m_Busy) return;
+
+            var timeUp = Time.time - m_ClearedTime >= m_ClearedHoldSeconds;
+            var released = m_ControllerGrab != null && !m_ControllerGrab.isSelected;
+            if (!timeUp && !released) return;
+
+            m_PendingTransition = false;
             if (CurrentPhase == Phase.Peaceful) StartCoroutine(TransitionToWar());
             else if (CurrentPhase == Phase.War) StartCoroutine(ShowEnding());
         }

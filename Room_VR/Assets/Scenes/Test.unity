@@ -33802,6 +33802,8 @@ MonoBehaviour:
   m_OnFadedIn:
     m_PersistentCalls:
       m_Calls: []
+  m_ClearedHoldSeconds: 10
+  m_ControllerGrab: {fileID: 324026137}
 --- !u!4 &1507490659
 Transform:
   m_ObjectHideFlags: 0
