@@ -104,6 +104,28 @@ namespace RoomVR.Interaction
         readonly Dictionary<Transform, Quaternion> m_OriginalRotations = new();
         readonly Dictionary<Transform, Vector3>    m_OriginalPositions = new();
 
+        // Active external grip pose (set by a grabbed object via SetGripPose). When null,
+        // this hand uses its own serialized grab pose (the controller pose).
+        HandGripPose m_ActivePose;
+
+        // ── Handedness registry ─────────────────────────────────────────────────
+        // Lets any grabbable resolve the hand that grabbed it without per-object wiring.
+
+        public enum Hand { Left, Right }
+        public static HandPoseAnimator LeftHand { get; private set; }
+        public static HandPoseAnimator RightHand { get; private set; }
+        Hand m_Hand;
+
+        public static HandPoseAnimator ResolveFromInteractor(Transform interactor)
+        {
+            for (var t = interactor; t != null; t = t.parent)
+            {
+                if (t.name.Contains("Left")) return LeftHand;
+                if (t.name.Contains("Right")) return RightHand;
+            }
+            return null;
+        }
+
         // ── Lifecycle ─────────────────────────────────────────────────────────────
 
         void Awake()
@@ -119,6 +141,26 @@ namespace RoomVR.Interaction
                 m_OriginalRotations[m_Wrist] = m_Wrist.localRotation;
                 m_OriginalPositions[m_Wrist] = m_Wrist.localPosition;
             }
+
+            // Register as the left/right hand based on this object's name.
+            m_Hand = NameSuggestsRight() ? Hand.Right : Hand.Left;
+            if (m_Hand == Hand.Right) RightHand = this; else LeftHand = this;
+        }
+
+        void OnDestroy()
+        {
+            if (LeftHand == this) LeftHand = null;
+            if (RightHand == this) RightHand = null;
+        }
+
+        bool NameSuggestsRight()
+        {
+            for (var t = transform; t != null; t = t.parent)
+            {
+                if (t.name.Contains("Right")) return true;
+                if (t.name.Contains("Left")) return false;
+            }
+            return false;
         }
 
         void OnEnable()
@@ -139,11 +181,12 @@ namespace RoomVR.Interaction
             var grip    = isGrabbing ? m_GripOverride : m_GripInput?.ReadValue() ?? 0f;
             var trigger = isGrabbing ? 0f            : m_TriggerInput?.ReadValue() ?? 0f;
 
-            ApplyFinger(m_Thumb,  grip,                    isGrabbing);
-            ApplyFinger(m_Index,  Mathf.Max(grip, trigger), isGrabbing);
-            ApplyFinger(m_Middle, grip,                    isGrabbing);
-            ApplyFinger(m_Ring,   grip,                    isGrabbing);
-            ApplyFinger(m_Pinky,  grip,                    isGrabbing);
+            var p = m_ActivePose;
+            ApplyFinger(m_Thumb,  p?.thumb,  grip,                    isGrabbing);
+            ApplyFinger(m_Index,  p?.index,  Mathf.Max(grip, trigger), isGrabbing);
+            ApplyFinger(m_Middle, p?.middle, grip,                    isGrabbing);
+            ApplyFinger(m_Ring,   p?.ring,   grip,                    isGrabbing);
+            ApplyFinger(m_Pinky,  p?.pinky,  grip,                    isGrabbing);
 
             ApplyThumbOverlay(isGrabbing);
             ApplyWrist(isGrabbing);
@@ -153,6 +196,11 @@ namespace RoomVR.Interaction
 
         public void SetGripOverride(float t) => m_GripOverride = Mathf.Clamp01(t);
 
+        // Applies an external grip pose (e.g. from a grabbed object) instead of this
+        // hand's own serialized grab pose. Pass null / ClearGripPose to revert.
+        public void SetGripPose(HandGripPose pose) => m_ActivePose = pose;
+        public void ClearGripPose() => m_ActivePose = null;
+
         // Sets the extra thumb rotation for this frame. Pass Quaternion.identity to clear.
         // Only takes effect while the hand is in grab pose.
         public void SetThumbOverlay(Quaternion overlay) => m_ThumbOverlay = overlay;
@@ -161,7 +209,9 @@ namespace RoomVR.Interaction
 
         // ── Private helpers ───────────────────────────────────────────────────────
 
-        void ApplyFinger(FingerBones finger, float t, bool isGrabbing)
+        // grip: optional external grip pose for this finger (from a grabbed object). When
+        // set, it fully defines the finger's grab pose; otherwise the hand's own values are used.
+        void ApplyFinger(FingerBones finger, FingerGrip grip, float t, bool isGrabbing)
         {
             if (finger.joints == null) return;
 
@@ -176,7 +226,21 @@ namespace RoomVR.Interaction
                 Vector3 axis;
                 float angle;
 
-                if (isGrabbing && TryGetJointGrab(finger, i, out var jointAxis, out var jointAngle))
+                if (isGrabbing && grip != null)
+                {
+                    // External grip pose defines this finger (per-joint override, else finger-level).
+                    if (TryGetJointGrab(grip.grabJoints, i, out var ja, out var jang))
+                    {
+                        axis = ja;
+                        angle = jang;
+                    }
+                    else
+                    {
+                        axis = grip.curlAxis.sqrMagnitude > 1e-6f ? grip.curlAxis : finger.curlAxis;
+                        angle = grip.curlAngle;
+                    }
+                }
+                else if (isGrabbing && TryGetJointGrab(finger.grabJoints, i, out var jointAxis, out var jointAngle))
                 {
                     // Per-joint grab override: independent angle (weight) and axis (orientation).
                     axis = jointAxis;
@@ -197,16 +261,16 @@ namespace RoomVR.Interaction
             }
         }
 
-        // Returns the per-joint grab override for joints[index] if one is configured
+        // Returns the per-joint grab override for grabJoints[index] if one is configured
         // (i.e. its curlAxis is non-zero). Otherwise the finger-level pose is used.
-        static bool TryGetJointGrab(FingerBones finger, int index, out Vector3 axis, out float angle)
+        static bool TryGetJointGrab(JointGrabPose[] grabJoints, int index, out Vector3 axis, out float angle)
         {
             axis = default;
             angle = 0f;
 
-            if (finger.grabJoints == null || index >= finger.grabJoints.Length) return false;
+            if (grabJoints == null || index >= grabJoints.Length) return false;
 
-            var jp = finger.grabJoints[index];
+            var jp = grabJoints[index];
             if (jp.curlAxis.sqrMagnitude < 1e-6f) return false;
 
             axis = jp.curlAxis;
@@ -235,8 +299,10 @@ namespace RoomVR.Interaction
 
             if (isGrabbing)
             {
-                m_Wrist.localRotation = origRot * Quaternion.Euler(m_GrabWristPose.rotationEuler);
-                m_Wrist.localPosition = origPos + m_GrabWristPose.positionOffset/100f;
+                var euler  = m_ActivePose != null ? m_ActivePose.wristRotationEuler  : m_GrabWristPose.rotationEuler;
+                var offset = m_ActivePose != null ? m_ActivePose.wristPositionOffset : m_GrabWristPose.positionOffset;
+                m_Wrist.localRotation = origRot * Quaternion.Euler(euler);
+                m_Wrist.localPosition = origPos + offset/100f;
             }
             else
             {
