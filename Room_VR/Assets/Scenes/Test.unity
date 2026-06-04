@@ -7009,7 +7009,7 @@ Transform:
   m_GameObject: {fileID: 324026135}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.062, y: 0.7902, z: -0.453}
+  m_LocalPosition: {x: 0.062, y: 0.751, z: -0.453}
   m_LocalScale: {x: 0.14, y: 0.06, z: 0.24}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7084,7 +7084,7 @@ MonoBehaviour:
     m_Flags: 0
   m_CircleButton: {fileID: 1600348596}
   m_CrossButton: {fileID: 35751169}
-  m_ButtonPressedOffset: {x: 0, y: -0.02, z: 0}
+  m_ButtonPressedOffset: {x: 0, y: 0, z: 0}
   m_Stick: {fileID: 328424643}
   m_StickRotationRange: {x: 30, y: 100}
   m_StickRotateAroundCenter: 1
@@ -7101,12 +7101,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324026135}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d28c9fd5e2d86447999a7dd47584b15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ReturnDuration: 0.35
 --- !u!1 &328424642
 GameObject:
   m_ObjectHideFlags: 0
@@ -15980,6 +15979,10 @@ PrefabInstance:
     - target: {fileID: 4087241092003064578, guid: ae85a5332b8a74df79506be64c267d24, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366643932280629496, guid: ae85a5332b8a74df79506be64c267d24, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.038
       objectReference: {fileID: 0}
     - target: {fileID: 4827533778760490501, guid: ae85a5332b8a74df79506be64c267d24, type: 3}
       propertyPath: m_Name
@@ -33247,7 +33250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1490883887
 Transform:
   m_ObjectHideFlags: 0
@@ -33735,6 +33738,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 324026144}
+          m_TargetAssemblyTypeName: RoomVR.Interaction.ControllerHomeReset, Assembly-CSharp
+          m_MethodName: ReturnHomeNow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   m_War:
     enable:
     - {fileID: 1942602349}
@@ -33743,6 +33758,18 @@ MonoBehaviour:
     onEnter:
       m_PersistentCalls:
         m_Calls:
+        - m_Target: {fileID: 324026144}
+          m_TargetAssemblyTypeName: RoomVR.Interaction.ControllerHomeReset, Assembly-CSharp
+          m_MethodName: ReturnHomeNow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
         - m_Target: {fileID: 1081348855}
           m_TargetAssemblyTypeName: RoomVR.MiniGame.DroppingGameController, Assembly-CSharp
           m_MethodName: ResetGame
@@ -41002,7 +41029,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1942602350
 Transform:
   m_ObjectHideFlags: 0
