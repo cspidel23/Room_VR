@@ -164,6 +164,15 @@ namespace RoomVR.Interaction
                 ForceReleaseAll();
         }
 
+        // Releases the prop from any hands currently holding it. Safe to call from
+        // outside an XRI callback (e.g. a phase transition) — it exits interactors one
+        // at a time after clearing state, so it never re-enters XRI's selection loop.
+        public void ForceRelease()
+        {
+            if (m_CurrentInteractors.Count > 0)
+                ForceReleaseAll();
+        }
+
         void ForceReleaseAll()
         {
             var toRelease = new List<IXRSelectInteractor>(m_CurrentInteractors);
