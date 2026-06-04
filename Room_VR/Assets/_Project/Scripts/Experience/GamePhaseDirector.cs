@@ -215,11 +215,15 @@ namespace RoomVR.Experience
             // fade to black, show the message, end). Keep the hands hidden.
             SetHidden(true);
             m_OnFadedToBlack?.Invoke();
-            if (m_EndingMessage != null) m_EndingMessage.SetActive(true);
+            
             m_OnEnding?.Invoke();
             CurrentPhase = Phase.Ending;
             PhaseChanged?.Invoke(CurrentPhase);
-
+            if (m_EndingMessage != null)
+            {
+                yield return new WaitForSeconds(10.0f);
+                m_EndingMessage.SetActive(true);
+            }
             // Experience is over: leave the screen black and the controller locked.
             m_Busy = false;
         }

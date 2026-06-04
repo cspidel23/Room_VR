@@ -27,30 +27,30 @@ public class SceneAudioLerp : MonoBehaviour
     }
 
     // method that is called when the audio should start
-    public void StartAudio()
+    public void StartAudio(float lerpTime = 1)
     {
-        StartCoroutine(AudioLerp(targetVolume));
+        StartCoroutine(AudioLerp(targetVolume, lerpTime));
     }
 
     // method that is called when the audio should end
-    public void EndAudio()
+    public void EndAudio(float lerpTime = 1)
     {
-        StartCoroutine(AudioLerp(0));
+        StartCoroutine(AudioLerp(0, lerpTime));
     }
 
-    private IEnumerator AudioLerp(float targetVolume)
+    private IEnumerator AudioLerp(float targetVolume, float lerpTime)
     {
         float currentVolume = m_Source.volume;
         float time = 0;
 
-        while (time < m_lerpTime)
+        while (time < lerpTime)
         {
             time += Time.deltaTime;
 
             m_Source.volume = Mathf.Lerp(
                 currentVolume,
                 targetVolume,
-                time / m_lerpTime
+                time / lerpTime
             );
 
             yield return null;
