@@ -33809,8 +33809,10 @@ MonoBehaviour:
   m_MiniGame: {fileID: 1081348855}
   m_Fader: {fileID: 445387352}
   m_Peaceful:
-    enable: []
-    disable: []
+    enable:
+    - {fileID: 1490883886}
+    disable:
+    - {fileID: 1942602349}
     onEnter:
       m_PersistentCalls:
         m_Calls:
