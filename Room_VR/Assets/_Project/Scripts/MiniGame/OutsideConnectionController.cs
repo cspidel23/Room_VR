@@ -8,9 +8,10 @@ public class OutsideConnectionController : MonoBehaviour
     public static OutsideConnectionController Instance { get; private set; }
 
     [Header("Random Explosions")]
-    [SerializeField] private bool isRandBlasts = false;
-    [SerializeField] private float minRandBlast = 5f;
-    [SerializeField] private float maxRandBlast = 10f;
+    [SerializeField] private bool m_isRandBlasts = false;
+    [SerializeField] private float m_randBlastMultiplier = .33f;
+    [SerializeField] private float m_minRandBlast = 5f;
+    [SerializeField] private float m_maxRandBlast = 10f;
 
     [Header("Intensity Multipliers")]
     [SerializeField] private float m_minIntensityMultiplier = .5f;
@@ -48,7 +49,7 @@ public class OutsideConnectionController : MonoBehaviour
 
     private void Start()
     {
-        if (isRandBlasts)
+        if (m_isRandBlasts)
         {
             StartCoroutine(TestExplosion());
         }
@@ -56,19 +57,19 @@ public class OutsideConnectionController : MonoBehaviour
 
     private IEnumerator TestExplosion()
     {
-        yield return new WaitForSeconds(Random.Range(minRandBlast, maxRandBlast));
-        TriggerExplosionEffect();
+        yield return new WaitForSeconds(Random.Range(m_minRandBlast, m_maxRandBlast));
+        TriggerExplosionEffect(m_randBlastMultiplier);
         StartCoroutine(TestExplosion());
     }
 
     // single method to trigger the explosion effects
-    public void TriggerExplosionEffect()
+    public void TriggerExplosionEffect(float blastMultiplier = 1f)
     {
         var director = GamePhaseDirector.Instance;
         if (director != null && !director.IsWar) return;
 
         // a random multiplier on intensity of the various actions
-        float multiplier = Random.Range(m_minIntensityMultiplier, m_maxIntensityMultiplier);
+        float multiplier = Random.Range(m_minIntensityMultiplier, m_maxIntensityMultiplier) * blastMultiplier;
 
         TriggerOutsideAudio(multiplier); // ignore this one for now
         TriggerLightFlash(multiplier);
