@@ -49,6 +49,18 @@ namespace RoomVR.Experience
 
         [SerializeField] UnityEvent m_OnEnding;
 
+        [SerializeField]
+        [Tooltip("Seconds the ending message stays fully shown before it fades out.")]
+        float m_EndingHoldSeconds = 15f;
+
+        [SerializeField]
+        [Tooltip("Seconds to fade out the ending text, then the audio, before quitting.")]
+        float m_EndingFadeDuration = 2f;
+
+        [SerializeField]
+        [Tooltip("CanvasGroup used to fade the ending message. Auto-added to the message if empty.")]
+        CanvasGroup m_EndingCanvasGroup;
+
         [Header("Transition")]
         [SerializeField]
         [Tooltip("Disabled during transitions so the controller can't be grabbed/started mid-fade " +
@@ -134,6 +146,7 @@ namespace RoomVR.Experience
 
         void Start()
         {
+            AudioListener.volume = 1f; // ensure a clean start (the ending fades this to 0)
             if (m_EndingMessage != null) m_EndingMessage.SetActive(false);
 
             ApplyPhase(m_Peaceful);
@@ -223,9 +236,63 @@ namespace RoomVR.Experience
             {
                 yield return new WaitForSeconds(10.0f);
                 m_EndingMessage.SetActive(true);
+                EnsureEndingCanvasGroup();
+                if (m_EndingCanvasGroup != null) m_EndingCanvasGroup.alpha = 1f;
             }
-            // Experience is over: leave the screen black and the controller locked.
+
+            // Hold the message, then fade out the text, then the audio, then quit.
+            yield return new WaitForSeconds(m_EndingHoldSeconds);
+            yield return FadeOutEnding();
+            QuitApplication();
+
             m_Busy = false;
+        }
+
+        void EnsureEndingCanvasGroup()
+        {
+            if (m_EndingCanvasGroup == null && m_EndingMessage != null)
+            {
+                m_EndingCanvasGroup = m_EndingMessage.GetComponent<CanvasGroup>();
+                if (m_EndingCanvasGroup == null)
+                    m_EndingCanvasGroup = m_EndingMessage.AddComponent<CanvasGroup>();
+            }
+        }
+
+        // Fades the ending text out, then the remaining audio out.
+        IEnumerator FadeOutEnding()
+        {
+            var dur = Mathf.Max(0.01f, m_EndingFadeDuration);
+
+            if (m_EndingCanvasGroup != null)
+            {
+                var t = 0f;
+                while (t < 1f)
+                {
+                    t += Time.deltaTime / dur;
+                    m_EndingCanvasGroup.alpha = Mathf.Lerp(1f, 0f, Mathf.Clamp01(t));
+                    yield return null;
+                }
+                m_EndingCanvasGroup.alpha = 0f;
+            }
+
+            var startVol = AudioListener.volume;
+            var a = 0f;
+            while (a < 1f)
+            {
+                a += Time.deltaTime / dur;
+                AudioListener.volume = Mathf.Lerp(startVol, 0f, Mathf.Clamp01(a));
+                yield return null;
+            }
+            AudioListener.volume = 0f;
+        }
+
+        void QuitApplication()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
 
         Coroutine Fade(float duration, bool toBlack)
